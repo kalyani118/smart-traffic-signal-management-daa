@@ -19,6 +19,9 @@
  */
 
 @theme inline {
+  --font-sans: "Manrope", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -59,29 +62,39 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-surface: var(--surface);
+  --color-success: var(--success);
+  --color-emergency: var(--emergency);
+  --color-emergency-foreground: var(--emergency-foreground);
+  --shadow-panel: 0 18px 50px color-mix(in oklab, var(--background) 45%, transparent);
+  --shadow-signal: 0 0 24px color-mix(in oklab, var(--success) 35%, transparent);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --radius: 0.4rem;
+  --background: oklch(0.145 0.026 252);
+  --foreground: oklch(0.95 0.014 210);
+  --card: oklch(0.19 0.029 252);
+  --card-foreground: oklch(0.95 0.014 210);
+  --popover: oklch(0.2 0.03 252);
+  --popover-foreground: oklch(0.95 0.014 210);
+  --primary: oklch(0.78 0.15 186);
+  --primary-foreground: oklch(0.13 0.025 252);
+  --secondary: oklch(0.235 0.03 252);
+  --secondary-foreground: oklch(0.92 0.015 210);
+  --muted: oklch(0.225 0.026 252);
+  --muted-foreground: oklch(0.68 0.025 225);
+  --accent: oklch(0.28 0.045 218);
+  --accent-foreground: oklch(0.95 0.014 210);
+  --destructive: oklch(0.61 0.22 27);
+  --destructive-foreground: oklch(0.98 0.008 30);
+  --border: oklch(0.32 0.035 242);
+  --input: oklch(0.35 0.035 242);
+  --ring: oklch(0.78 0.15 186);
+  --surface: oklch(0.175 0.027 252);
+  --success: oklch(0.78 0.17 151);
+  --emergency: oklch(0.64 0.23 27);
+  --emergency-foreground: oklch(0.98 0.008 30);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +153,46 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+    margin: 0;
   }
+}
+
+@utility bg-grid {
+  background-image: linear-gradient(color-mix(in oklab, var(--border) 38%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--border) 38%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@utility bg-map {
+  background-color: color-mix(in oklab, var(--background) 72%, var(--surface));
+  background-image: linear-gradient(color-mix(in oklab, var(--border) 30%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--border) 30%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.road-base { fill: none; stroke: var(--border); stroke-width: 16; stroke-linecap: round; }
+.road-flow { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 8 8; transition: stroke 300ms ease, stroke-width 300ms ease; animation: traffic-flow 1.3s linear infinite; }
+.road-low { stroke: var(--success); }
+.road-medium { stroke: oklch(0.82 0.16 87); }
+.road-high { stroke: var(--emergency); }
+.road-active { stroke: var(--primary); stroke-width: 8; filter: url(#route-glow); }
+.road-emergency { stroke: var(--success); stroke-width: 9; filter: url(#route-glow); animation-duration: .55s; }
+.node-halo { fill: color-mix(in oklab, var(--primary) 18%, transparent); stroke: color-mix(in oklab, var(--primary) 40%, transparent); }
+.node-halo-emergency { fill: color-mix(in oklab, var(--success) 18%, transparent); stroke: var(--success); animation: signal-pulse 1.5s ease-out infinite; }
+.traffic-dot { display: inline-block; width: .45rem; height: .45rem; border-radius: 999px; }
+.traffic-low { background: var(--success); }
+.traffic-medium { background: oklch(0.82 0.16 87); }
+.traffic-high { background: var(--emergency); }
+.signal-light { width: .7rem; height: .7rem; border-radius: 999px; box-shadow: 0 0 12px currentColor; }
+.signal-green { color: var(--success); background: var(--success); }
+.signal-red { color: var(--emergency); background: var(--emergency); }
+.traffic-bar-low { width: 32%; background: var(--success); }
+.traffic-bar-medium { width: 65%; background: oklch(0.82 0.16 87); }
+.traffic-bar-high { width: 92%; background: var(--emergency); }
+
+@keyframes traffic-flow { to { stroke-dashoffset: -16; } }
+@keyframes signal-pulse { 0% { opacity: .9; transform: scale(.85); } 100% { opacity: 0; transform: scale(1.35); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .road-flow, .node-halo-emergency, .ambulance-marker { animation: none; }
 }
