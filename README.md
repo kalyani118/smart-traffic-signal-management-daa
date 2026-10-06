@@ -73,6 +73,7 @@ Find Fastest Route
 Optimize Signal Decisions
        ↓
 Display Result
+
 ✨ Key Features
 🚦 1. Live Traffic Simulation
 The system simulates changing traffic conditions:
